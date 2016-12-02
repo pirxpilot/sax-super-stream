@@ -1,6 +1,6 @@
 {
   "name": "sax-super-stream",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Transform stream implemented using SAX with hierarchical parsing",
   "author": {
     "name": "Damian Krzeminski",
