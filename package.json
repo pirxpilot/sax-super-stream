@@ -1,0 +1,33 @@
+{
+  "name": "sax-super-stream",
+  "version": "0.0.0",
+  "description": "Transform stream implemented using SAX with hierarchical parsing",
+  "author": {
+    "name": "Damian Krzeminski",
+    "email": "pirxpilot@code42day.com",
+    "url": "https://code42day.com"
+  },
+  "repository": "code42day/sax-super-stream",
+  "license": "MIT",
+  "keywords": [
+    "sax-super-stream",
+    "sax",
+    "transform",
+    "object"
+  ],
+  "dependencies": {
+    "sax": "^1.2.1"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.4",
+    "mocha": "^3.2.0",
+    "should": "^11.1.1"
+  },
+  "scripts": {
+    "test": "make check"
+  },
+  "files": [
+    "index.js",
+    "lib"
+  ]
+}
