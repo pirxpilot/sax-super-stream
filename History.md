@@ -1,4 +1,10 @@
 
+0.3.0 / 2016-12-03
+==================
+
+ * add more standard parsers: object, collection
+ * fix exception on cdata in ignored elements
+
 0.2.0 / 2016-12-03
 ==================
 
