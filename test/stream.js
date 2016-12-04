@@ -115,4 +115,31 @@ describe('sax super stream', function(){
       .on('error', done);
   });
 
+  it('should parse CDATA as text', function(done) {
+    var config = {
+      'FOUR': {
+        'ITEM': {
+          $: function() { return {}; },
+          'A': { $text: stream.assignTo('a') },
+          'B': { $text: stream.assignTo('b') }
+        }
+      }
+    };
+    var result = [];
+
+    function verify() {
+      result.should.have.length(2);
+      result[0].should.be.eql({ a: 'abc', b: '15' });
+      result[1].should.be.eql({ a: 'def', b: '16' });
+
+      done();
+    }
+
+    readStream('four.xml')
+      .pipe(stream(config))
+      .pipe(memory(result))
+      .on('finish', verify)
+      .on('error', done);
+  });
+
 });
