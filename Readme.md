@@ -44,7 +44,7 @@ getlet('http://blog.npmjs.org/rss')
 
 ```
 
-More examples can be found in [Furkot] [GPX][furkot-import-gpx] and [KML][furkot-import-kml] importers.
+More examples can be found in [Furkot][] [GPX][furkot-import-gpx] and [KML][furkot-import-kml] importers.
 
 ## API
 
