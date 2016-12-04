@@ -23,7 +23,7 @@ function memory(array) {
 describe('sax super stream', function(){
   it('should parse a single empty node', function(done){
     var config = {
-      'item': function() { return {}; }
+      'item': stream.object()
     };
     var result = [];
 
@@ -44,7 +44,7 @@ describe('sax super stream', function(){
     var config = {
       'two': {
         'item': {
-          $: function() { return {}; },
+          $: stream.object(),
           'a': { $text: stream.assignTo('A') },
           'b': { $text: stream.assignTo('B') }
         }
@@ -73,7 +73,7 @@ describe('sax super stream', function(){
       'THREE': {
         'ITEMS': {
           'ITEM': {
-            $: function() { return {}; },
+            $: stream.object(),
             'A': { $: appendToCollection },
             'B': { $: addToParent }
           }
@@ -119,7 +119,7 @@ describe('sax super stream', function(){
     var config = {
       'FOUR': {
         'ITEM': {
-          $: function() { return {}; },
+          $: stream.object(),
           'A': { $text: stream.assignTo('a') },
           'B': { $text: stream.assignTo('b') }
         }
