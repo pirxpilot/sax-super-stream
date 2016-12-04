@@ -115,6 +115,96 @@ describe('sax super stream', function(){
       .on('error', done);
   });
 
+  it('should call $after parser if specified', function(done) {
+    var value = 0;
+    var config = {
+      'doc': {
+        'item': {
+          $: stream.object(),
+          $after: function(obj) { obj.value = value++; }
+        }
+      }
+    };
+    var result = [];
+
+    function verify() {
+      value.should.be.eql(2);
+      result.should.have.length(2);
+      result[0].should.have.property('value', 0);
+      result[1].should.have.property('value', 1);
+      done();
+    }
+
+    readStream('ns.xml')
+      .pipe(stream(config))
+      .pipe(memory(result))
+      .on('finish', verify)
+      .on('error', done);
+  });
+
+  it('should ignore namespace if none declared', function(done) {
+    var config = {
+      'doc': {
+        'item': { $: stream.object() }
+      }
+    };
+    var result = [];
+
+    function verify() {
+      result.should.have.length(2);
+      done();
+    }
+
+    readStream('ns.xml')
+      .pipe(stream(config))
+      .pipe(memory(result))
+      .on('finish', verify)
+      .on('error', done);
+  });
+
+  it('should accept elements if namespace matches $uri attribute', function(done) {
+    var config = {
+      'doc': {
+        $uri: 'http://example.com',
+        'item': { $: stream.object() }
+      }
+    };
+    var result = [];
+
+    function verify() {
+      result.should.have.length(2);
+      done();
+    }
+
+    readStream('ns.xml')
+      .pipe(stream(config))
+      .pipe(memory(result))
+      .on('finish', verify)
+      .on('error', done);
+  });
+
+  it('should ignore elements if namespace does not match $uri attribute', function(done) {
+    var config = {
+      'doc': {
+        $uri: 'http://another.com',
+        'item': { $: stream.object() }
+      }
+    };
+    var result = [];
+
+    function verify() {
+      result.should.have.length(0);
+      done();
+    }
+
+    readStream('ns.xml')
+      .pipe(stream(config))
+      .pipe(memory(result))
+      .on('finish', verify)
+      .on('error', done);
+  });
+
+
   it('should parse CDATA as text', function(done) {
     var config = {
       'FOUR': {
