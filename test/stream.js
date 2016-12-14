@@ -1,5 +1,7 @@
 var fs = require('fs');
+var should = require('should');
 var Writable = require('stream').Writable;
+var Readable = require('stream').Readable;
 
 var stream = require('..');
 
@@ -230,6 +232,33 @@ describe('sax super stream', function(){
       .pipe(memory(result))
       .on('finish', verify)
       .on('error', done);
+  });
+
+  it('should raise errors on invalid XML', function(done) {
+
+    var config = {
+      'item': { $: stream.object() }
+    };
+
+    var from = new Readable({
+      read: function() {}
+    });
+
+    from
+      .pipe(stream(config))
+      .on('error', function(err) {
+        should.exist(err);
+        err.should.have.property('message', 'Unexpected close tag');
+        done();
+      })
+      .on('finish', function() {
+        should.fail('finish should not be called on errors');
+        done();
+      });
+
+    from.push('<item>');
+    from.push('</not-item>');
+    from.push(null);
   });
 
 });
