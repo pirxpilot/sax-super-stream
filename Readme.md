@@ -112,7 +112,7 @@ There are several predefined parser functions that can be used in parser config:
 
 ## License
 
-MIT © [Damian Krzeminski](https://code42day.com)
+MIT © [Damian Krzeminski](https://pirxpilot.me)
 
 [Furkot]: https://furkot.com
 [furkot-import-gpx]: https://npmjs.org/package/furkot-import-gpx
@@ -122,8 +122,8 @@ MIT © [Damian Krzeminski](https://code42day.com)
 [npm-image]: https://img.shields.io/npm/v/sax-super-stream.svg
 [npm-url]: https://npmjs.org/package/sax-super-stream
 
-[travis-url]: https://travis-ci.org/code42day/sax-super-stream
-[travis-image]: https://img.shields.io/travis/code42day/sax-super-stream.svg
+[travis-url]: https://travis-ci.org/pirxpilot/sax-super-stream
+[travis-image]: https://img.shields.io/travis/pirxpilot/sax-super-stream.svg
 
-[gemnasium-image]: https://img.shields.io/gemnasium/code42day/sax-super-stream.svg
-[gemnasium-url]: https://gemnasium.com/code42day/sax-super-stream
+[gemnasium-image]: https://img.shields.io/gemnasium/pirxpilot/sax-super-stream.svg
+[gemnasium-url]: https://gemnasium.com/pirxpilot/sax-super-stream
