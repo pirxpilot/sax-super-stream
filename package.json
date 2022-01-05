@@ -16,7 +16,7 @@
     "object"
   ],
   "dependencies": {
-    "debug": "~2",
+    "debug": "~2 || ~3 || ~4",
     "sax": "^1.2.1"
   },
   "devDependencies": {
