@@ -1,4 +1,11 @@
 
+1.0.3 / 2022-01-05
+==================
+
+ * replace Travis CI with github action
+ * upgrade debug to ~4
+ * upgrade mocha and should
+
 1.0.2 / 2017-02-19
 ==================
 
