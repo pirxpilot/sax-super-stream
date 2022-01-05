@@ -1,6 +1,6 @@
 [![NPM version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Dependency Status][gemnasium-image]][gemnasium-url]
+[![Build Status][build-image]][build-url]
+[![Dependency Status][deps-image]][deps-url]
 
 # sax-super-stream
 
@@ -125,5 +125,8 @@ MIT © [Damian Krzeminski](https://pirxpilot.me)
 [travis-url]: https://travis-ci.org/pirxpilot/sax-super-stream
 [travis-image]: https://img.shields.io/travis/pirxpilot/sax-super-stream.svg
 
-[gemnasium-image]: https://img.shields.io/gemnasium/pirxpilot/sax-super-stream.svg
-[gemnasium-url]: https://gemnasium.com/pirxpilot/sax-super-stream
+[build-url]: https://github.com/pirxpilot/sax-super-stream/actions/workflows/check.yaml
+[build-image]: https://img.shields.io/github/workflow/status/pirxpilot/sax-super-stream/check
+
+[deps-image]: https://img.shields.io/librariesio/release/npm/sax-super-stream
+[deps-url]: https://libraries.io/npm/sax-super-stream
