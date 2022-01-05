@@ -1,22 +1,20 @@
-var getlet = require('getlet');
-var stream = require('..');
+const getlet = require('getlet');
+const stream = require('..');
 
-var PARSERS = {
+const PARSERS = {
   'rss': {
     'channel': {
       'item': {
         $: stream.object,
         'title': {
-          $text: function(text, o) { o.title = text; }
+          $text(text, o) { o.title = text; }
         }
       }
     }
   }
 };
 
-getlet('http://blog.npmjs.org/rss')
+getlet('https://github.blog/feed/')
   .pipe(stream(PARSERS))
-  .on('data', function(item) {
-    console.log(item.title);
-  });
+  .on('data', ({title}) => console.log(title));
 

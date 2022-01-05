@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "getlet": "^1.0.0"
+    "getlet": "~2"
   }
 }
