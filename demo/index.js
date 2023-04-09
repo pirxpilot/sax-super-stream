@@ -16,5 +16,4 @@ const PARSERS = {
 
 getlet('https://github.blog/feed/')
   .pipe(stream(PARSERS))
-  .on('data', ({title}) => console.log(title));
-
+  .on('data', ({ title }) => console.log(title));
