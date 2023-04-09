@@ -1,17 +1,18 @@
-var should = require('should');
-var stack = require('../lib/stack');
+const { describe, it } = require('node:test');
+const should = require('should');
+const stack = require('../lib/stack');
 
-describe('stack', function () {
+describe('stack', () => {
 
-  describe('top', function () {
+  describe('top', () => {
 
-    it('should return undefined for an empty stack', function () {
-      var s = stack();
+    it('should return undefined for an empty stack', () => {
+      const s = stack();
       should.not.exist(s.top());
     });
 
-    it('should return pushed item', function () {
-      var s = stack(5);
+    it('should return pushed item', () => {
+      const s = stack(5);
 
       s.top().should.be.eql(5);
 
@@ -28,10 +29,10 @@ describe('stack', function () {
 
   });
 
-  describe('push/pop', function() {
+  describe('push/pop', () => {
 
-    it('pop should return previously pushed item', function () {
-      var s = stack();
+    it('pop should return previously pushed item', () => {
+      const s = stack();
 
       s.empty().should.be.true();
       should.not.exist(s.pop());
@@ -47,8 +48,8 @@ describe('stack', function () {
       s.empty().should.be.true();
     });
 
-    it('pop should only return item if pushed tag matches', function () {
-      var s = stack();
+    it('pop should only return item if pushed tag matches', () => {
+      const s = stack();
 
       s.empty().should.be.true();
       should.not.exist(s.pop());
@@ -69,8 +70,6 @@ describe('stack', function () {
 
       s.empty().should.be.true();
     });
-
-
   });
 
 });
