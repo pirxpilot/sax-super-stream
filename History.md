@@ -1,4 +1,11 @@
 
+1.0.4 / 2023-04-09
+==================
+
+ * modernize and format code
+ * replace mocha with node:test
+ * update demo
+
 1.0.3 / 2022-01-05
 ==================
 
