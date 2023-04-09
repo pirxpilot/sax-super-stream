@@ -1,62 +1,62 @@
-// var should = require('should');
-var parsers = require('../lib/parsers');
+const { describe, it } = require('node:test');
+const parsers = require('../lib/parsers');
 
-describe('parsers', function () {
+describe('parsers', () => {
 
-  describe('object', function() {
+  describe('object', () => {
 
-    it('should create a new object', function() {
-      var object = parsers.object();
+    it('should create a new object', () => {
+      const object = parsers.object();
 
       object().should.eql({});
       object().should.not.be.exactly(object());
     });
 
-    it('should create a new object and assign it to parent', function() {
-      var node;
-      var parent = {};
-      var object = parsers.object('bongo');
+    it('should create a new object and assign it to parent', () => {
+      let node;
+      const parent = {};
+      const object = parsers.object('bongo');
 
-      var o = object(node, parent);
+      const o = object(node, parent);
       o.should.be.eql({});
       o.should.be.exactly(parent.bongo);
     });
   });
 
 
-  describe('collection', function() {
+  describe('collection', () => {
 
-    it('should create a new collection', function() {
-      var collection = parsers.collection();
+    it('should create a new collection', () => {
+      const collection = parsers.collection();
 
       collection().should.eql([]);
       collection().should.not.be.exactly(collection());
     });
 
-    it('should create a new collection and assign it to parent', function() {
-      var node;
-      var parent = {};
-      var collection = parsers.collection('bongo');
+    it('should create a new collection and assign it to parent', () => {
+      let node;
+      const parent = {};
+      const collection = parsers.collection('bongo');
 
-      var o = collection(node, parent);
+      const o = collection(node, parent);
       o.should.be.eql([]);
       o.should.be.exactly(parent.bongo);
     });
   });
 
-  describe('appendToCollection', function () {
-    it('should create a new collection and push new object', function () {
-      var node;
-      var parent = {};
-      var atc = parsers.appendToCollection('items');
+  describe('appendToCollection', () => {
+    it('should create a new collection and push new object', () => {
+      let node;
+      const parent = {};
+      const atc = parsers.appendToCollection('items');
 
-      var o = atc(node, parent);
+      const o = atc(node, parent);
 
       o.should.eql({});
       parent.items.should.have.length(1);
       parent.items[0].should.be.exactly(o);
 
-      var p = atc(node, parent);
+      const p = atc(node, parent);
       p.should.eql({});
       p.should.not.be.exactly(o);
 
@@ -66,24 +66,24 @@ describe('parsers', function () {
     });
   });
 
-  describe('addChild', function () {
-    it('should only add child once', function () {
-      var node;
-      var parent = {};
-      var ac = parsers.addChild('bongo');
+  describe('addChild', () => {
+    it('should only add child once', () => {
+      let node;
+      const parent = {};
+      const ac = parsers.addChild('bongo');
 
-      var o = ac(node, parent);
+      const o = ac(node, parent);
       o.should.be.eql({});
       o.should.be.exactly(parent.bongo);
 
-      o.should.be.exactly(ac(node,parent), 'when called again return the same object');
+      o.should.be.exactly(ac(node, parent), 'when called again return the same object');
     });
   });
 
-  describe('assignTo', function () {
-    it('should assign value to a named property', function () {
-      var parent = {};
-      var at = parsers.assignTo('akuku');
+  describe('assignTo', () => {
+    it('should assign value to a named property', () => {
+      const parent = {};
+      const at = parsers.assignTo('akuku');
 
       at(5, parent);
       parent.akuku.should.eql(5);

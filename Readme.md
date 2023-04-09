@@ -119,14 +119,14 @@ MIT © [Damian Krzeminski](https://pirxpilot.me)
 [furkot-import-kml]: https://npmjs.org/package/furkot-import-kml
 [sax]: https://npmjs.org/package/sax-js
 
-[npm-image]: https://img.shields.io/npm/v/sax-super-stream.svg
+[npm-image]: https://img.shields.io/npm/v/sax-super-stream
 [npm-url]: https://npmjs.org/package/sax-super-stream
 
-[travis-url]: https://travis-ci.org/pirxpilot/sax-super-stream
-[travis-image]: https://img.shields.io/travis/pirxpilot/sax-super-stream.svg
+[build-url]: https://github.com/pirxpilot/sax-super-stream/actions/workflows/check.yaml
+[build-image]: https://img.shields.io/github/actions/workflow/status/pirxpilot/sax-super-stream/check.yaml?branch=main
 
 [build-url]: https://github.com/pirxpilot/sax-super-stream/actions/workflows/check.yaml
-[build-image]: https://img.shields.io/github/workflow/status/pirxpilot/sax-super-stream/check
+[build-image]: https://img.shields.io/github/actions/workflow/status/pirxpilot/sax-super-stream/check.yaml?branch=main
 
 [deps-image]: https://img.shields.io/librariesio/release/npm/sax-super-stream
 [deps-url]: https://libraries.io/npm/sax-super-stream

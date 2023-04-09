@@ -1,12 +1,9 @@
-var fs = require('fs');
-var should = require('should');
-var Writable = require('stream').Writable;
-var Readable = require('stream').Readable;
+const { describe, it } = require('node:test');
+const fs = require('node:fs');
+const { pipeline } = require('node:stream/promises');
+const { Writable, Readable } = require('stream');
 
-var stream = require('..');
-
-/*global describe, it */
-
+const stream = require('..');
 
 function readStream(name) {
   return fs.createReadStream([__dirname, 'fixtures', name].join('/'));
@@ -15,35 +12,32 @@ function readStream(name) {
 function memory(array) {
   return new Writable({
     objectMode: true,
-    write: function (item, encoding, next) {
+    write(item, encoding, next) {
       array.push(item);
       next();
     }
   });
 }
 
-describe('sax super stream', function(){
-  it('should parse a single empty node', function(done){
-    var config = {
+describe('sax super stream', () => {
+  it('should parse a single empty node', async () => {
+    const config = {
       'item': stream.object()
     };
-    var result = [];
+    const result = [];
 
-    function verify() {
-      result.should.have.length(1);
-      result[0].should.eql({});
-      done();
-    }
+    await pipeline(
+      readStream('one.xml'),
+      stream(config),
+      memory(result)
+    );
+    result.should.have.length(1);
+    result[0].should.eql({});
 
-    readStream('one.xml')
-      .pipe(stream(config))
-      .pipe(memory(result))
-      .on('finish', verify)
-      .on('error', done);
   });
 
-  it('should parse nodes with text', function(done){
-    var config = {
+  it('should parse nodes with text', async () => {
+    const config = {
       'two': {
         'item': {
           $: stream.object(),
@@ -52,26 +46,24 @@ describe('sax super stream', function(){
         }
       }
     };
-    var result = [];
+    const result = [];
 
-    function verify() {
-      result.should.have.length(2);
-      result[0].should.have.property('A', 'abc');
-      result[0].should.have.property('B', '15');
-      result[1].should.have.property('A', 'def');
-      result[1].should.have.property('B', '16');
-      done();
-    }
+    await pipeline(
+      readStream('two.xml'),
+      stream(config),
+      memory(result)
+    );
+    result.should.have.length(2);
+    result[0].should.have.property('A', 'abc');
+    result[0].should.have.property('B', '15');
+    result[1].should.have.property('A', 'def');
+    result[1].should.have.property('B', '16');
 
-    readStream('two.xml')
-      .pipe(stream(config))
-      .pipe(memory(result))
-      .on('finish', verify)
-      .on('error', done);
+
   });
 
-  it('should parse attributes', function(done){
-    var config = {
+  it('should parse attributes', async () => {
+    const config = {
       'THREE': {
         'ITEMS': {
           'ITEM': {
@@ -82,133 +74,118 @@ describe('sax super stream', function(){
         }
       }
     };
-    var result = [];
+    const result = [];
 
-    function appendToCollection(node, parent) {
-      var obj = {
-        value: node.attributes.attr.value
+    function appendToCollection({ attributes }, parent) {
+      const obj = {
+        value: attributes.attr.value
       };
       parent.children = parent.children || [];
       parent.children.push(obj);
     }
 
-    function addToParent(node, parent) {
-      parent.b = node.attributes.attr.value;
+    function addToParent({ attributes }, parent) {
+      parent.b = attributes.attr.value;
     }
 
-    function verify() {
-      var item, a;
+    await pipeline(
+      readStream('three.xml'),
+      stream(config, { lowercase: true }),
+      memory(result)
+    );
+    let item;
+    let a;
 
-      result.should.have.length(1);
+    result.should.have.length(1);
 
-      item = result[0];
-      item.should.have.property('b', '4');
+    item = result[0];
+    item.should.have.property('b', '4');
 
-      a = item.children;
-      a.should.have.length(3);
-      a[0].should.have.property('value', '1');
-      done();
-    }
+    a = item.children;
+    a.should.have.length(3);
+    a[0].should.have.property('value', '1');
 
-    readStream('three.xml')
-      .pipe(stream(config, { lowercase: true }))
-      .pipe(memory(result))
-      .on('finish', verify)
-      .on('error', done);
   });
 
-  it('should call $after parser if specified', function(done) {
-    var value = 0;
-    var config = {
+  it('should call $after parser if specified', async () => {
+    let value = 0;
+    const config = {
       'doc': {
         'item': {
           $: stream.object(),
-          $after: function(obj) { obj.value = value++; }
+          $after(obj) { obj.value = value++; }
         }
       }
     };
-    var result = [];
+    const result = [];
 
-    function verify() {
-      value.should.be.eql(2);
-      result.should.have.length(2);
-      result[0].should.have.property('value', 0);
-      result[1].should.have.property('value', 1);
-      done();
-    }
+    await pipeline(
+      readStream('ns.xml'),
+      stream(config),
+      memory(result)
+    );
 
-    readStream('ns.xml')
-      .pipe(stream(config))
-      .pipe(memory(result))
-      .on('finish', verify)
-      .on('error', done);
+    value.should.be.eql(2);
+    result.should.have.length(2);
+    result[0].should.have.property('value', 0);
+    result[1].should.have.property('value', 1);
+
   });
 
-  it('should ignore namespace if none declared', function(done) {
-    var config = {
+  it('should ignore namespace if none declared', async () => {
+    const config = {
       'doc': {
         'item': { $: stream.object() }
       }
     };
-    var result = [];
+    const result = [];
 
-    function verify() {
-      result.should.have.length(2);
-      done();
-    }
+    await pipeline(
+      readStream('ns.xml'),
+      stream(config),
+      memory(result)
+    );
 
-    readStream('ns.xml')
-      .pipe(stream(config))
-      .pipe(memory(result))
-      .on('finish', verify)
-      .on('error', done);
+    result.should.have.length(2);
   });
 
-  it('should accept elements if namespace matches $uri attribute', function(done) {
-    var config = {
+  it('should accept elements if namespace matches $uri attribute', async () => {
+    const config = {
       'doc': {
         $uri: 'http://example.com',
         'item': { $: stream.object() }
       }
     };
-    var result = [];
+    const result = [];
 
-    function verify() {
-      result.should.have.length(2);
-      done();
-    }
+    await pipeline(
+      readStream('ns.xml'),
+      stream(config),
+      memory(result));
+    result.should.have.length(2);
 
-    readStream('ns.xml')
-      .pipe(stream(config))
-      .pipe(memory(result))
-      .on('finish', verify)
-      .on('error', done);
   });
 
-  it('should ignore elements if namespace does not match $uri attribute', function(done) {
-    var config = {
+  it('should ignore elements if namespace does not match $uri attribute', async () => {
+    const config = {
       'doc': {
         $uri: 'http://another.com',
         'item': { $: stream.object() }
       }
     };
-    var result = [];
+    const result = [];
 
-    function verify() {
-      result.should.have.length(0);
-      done();
-    }
+    await pipeline(
+      readStream('ns.xml'),
+      stream(config),
+      memory(result));
 
-    readStream('ns.xml')
-      .pipe(stream(config))
-      .pipe(memory(result))
-      .on('finish', verify)
-      .on('error', done);
+    result.should.have.length(0);
   });
 
 
-  it('should parse CDATA as text', function(done) {
-    var config = {
+  it('should parse CDATA as text', async () => {
+    const config = {
       'FOUR': {
         'ITEM': {
           $: stream.object(),
@@ -217,48 +194,35 @@ describe('sax super stream', function(){
         }
       }
     };
-    var result = [];
+    const result = [];
 
-    function verify() {
-      result.should.have.length(2);
-      result[0].should.be.eql({ a: 'abc', b: '15' });
-      result[1].should.be.eql({ a: 'def', b: '16' });
+    await pipeline(
+      readStream('four.xml'),
+      stream(config),
+      memory(result));
 
-      done();
-    }
+    result.should.have.length(2);
+    result[0].should.be.eql({ a: 'abc', b: '15' });
+    result[1].should.be.eql({ a: 'def', b: '16' });
 
-    readStream('four.xml')
-      .pipe(stream(config))
-      .pipe(memory(result))
-      .on('finish', verify)
-      .on('error', done);
   });
 
-  it('should raise errors on invalid XML', function(done) {
+  it('should raise errors on invalid XML', async () => {
 
-    var config = {
+    const config = {
       'item': { $: stream.object() }
     };
 
-    var from = new Readable({
-      read: function() {}
+    const from = new Readable({
+      read() {}
     });
 
-    from
-      .pipe(stream(config))
-      .on('error', function(err) {
-        should.exist(err);
-        err.should.have.property('message', 'Unexpected close tag');
-        done();
-      })
-      .on('finish', function() {
-        should.fail('finish should not be called on errors');
-        done();
-      });
+    const pipe = pipeline(from, stream(config));
 
     from.push('<item>');
     from.push('</not-item>');
     from.push(null);
-  });
 
+    await pipe.should.be.rejectedWith('Unexpected close tag');
+  });
 });
