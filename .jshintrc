@@ -6,7 +6,7 @@
   "latedef": "nofunc",
   "newcap": true,
   "noarg": true,
-  "node": true,
+  "browserify": true,
   "sub": true,
   "undef": true,
   "unused": true,
