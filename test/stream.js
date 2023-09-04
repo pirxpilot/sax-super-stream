@@ -232,7 +232,7 @@ describe('sax super stream', () => {
       read() {}
     });
 
-    const pipe = pipeline(from, stream(config, makeSax()));
+    const pipe = pipeline(from, stream(config, makeSax()), memory([]));
 
     from.push('<item>');
     from.push('</not-item>');
