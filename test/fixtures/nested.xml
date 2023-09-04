@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nested>
+  <item>
+    <a>abc</a>
+    <item>
+      <a>def</a>
+      <item>
+        <a>ghi</a>
+      </item>
+      </item>
+  </item>
+</nested>
