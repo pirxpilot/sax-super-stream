@@ -16,11 +16,11 @@
     "object"
   ],
   "dependencies": {
-    "debug": "~2 || ~3 || ~4",
-    "sax": "^1.2.1"
+    "debug": "~2 || ~3 || ~4"
   },
   "devDependencies": {
     "jshint": "~2",
+    "sax": "^1.2.1",
     "should": "~13"
   },
   "scripts": {

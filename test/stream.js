@@ -2,12 +2,27 @@ const { describe, it } = require('node:test');
 const fs = require('node:fs');
 const { pipeline } = require('node:stream/promises');
 const { Writable, Readable } = require('stream');
+const sax = require('sax');
 
 const stream = require('..');
 
 function readStream(name) {
   return fs.createReadStream([__dirname, 'fixtures', name].join('/'));
 }
+
+function makeSax(options = {}) {
+  return sax.parser(true, {
+    trim: true,
+    normalize: true,
+    lowercase: false,
+    xmlns: true,
+    position: false,
+    strictEntities: true,
+    noscript: true,
+    ...options
+  });
+}
+
 
 function memory(array) {
   return new Writable({
@@ -28,7 +43,7 @@ describe('sax super stream', () => {
 
     await pipeline(
       readStream('one.xml'),
-      stream(config),
+      stream(config, makeSax()),
       memory(result)
     );
     result.should.have.length(1);
@@ -50,7 +65,7 @@ describe('sax super stream', () => {
 
     await pipeline(
       readStream('two.xml'),
-      stream(config),
+      stream(config, makeSax()),
       memory(result)
     );
     result.should.have.length(2);
@@ -90,7 +105,7 @@ describe('sax super stream', () => {
 
     await pipeline(
       readStream('three.xml'),
-      stream(config, { lowercase: true }),
+      stream(config, makeSax({ lowercase: true })),
       memory(result)
     );
     let item;
@@ -121,7 +136,7 @@ describe('sax super stream', () => {
 
     await pipeline(
       readStream('ns.xml'),
-      stream(config),
+      stream(config, makeSax()),
       memory(result)
     );
 
@@ -142,7 +157,7 @@ describe('sax super stream', () => {
 
     await pipeline(
       readStream('ns.xml'),
-      stream(config),
+      stream(config, makeSax()),
       memory(result)
     );
 
@@ -160,7 +175,7 @@ describe('sax super stream', () => {
 
     await pipeline(
       readStream('ns.xml'),
-      stream(config),
+      stream(config, makeSax()),
       memory(result));
     result.should.have.length(2);
 
@@ -177,7 +192,7 @@ describe('sax super stream', () => {
 
     await pipeline(
       readStream('ns.xml'),
-      stream(config),
+      stream(config, makeSax()),
       memory(result));
 
     result.should.have.length(0);
@@ -198,7 +213,7 @@ describe('sax super stream', () => {
 
     await pipeline(
       readStream('four.xml'),
-      stream(config),
+      stream(config, makeSax()),
       memory(result));
 
     result.should.have.length(2);
@@ -217,7 +232,7 @@ describe('sax super stream', () => {
       read() {}
     });
 
-    const pipe = pipeline(from, stream(config));
+    const pipe = pipeline(from, stream(config, makeSax()));
 
     from.push('<item>');
     from.push('</not-item>');
