@@ -1,4 +1,9 @@
 
+2.0.0 / 2023-09-15
+==================
+
+ * rewrite using web TransformStream and Saxophone
+
 1.0.4 / 2023-04-09
 ==================
 
