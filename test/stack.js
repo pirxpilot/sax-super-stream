@@ -1,5 +1,5 @@
 const { describe, it } = require('node:test');
-const should = require('should');
+const assert = require('node:assert/strict');
 const stack = require('../lib/stack');
 
 describe('stack', () => {
@@ -8,23 +8,23 @@ describe('stack', () => {
 
     it('should return undefined for an empty stack', () => {
       const s = stack();
-      should.not.exist(s.top());
+      assert.equal(s.top(), undefined);
     });
 
     it('should return pushed item', () => {
       const s = stack(5);
 
-      s.top().should.be.eql(5);
+      assert.equal(s.top(), 5);
 
       s.push('abc');
-      s.top().should.be.eql('abc');
-      s.top(1).should.be.eql(5);
+      assert.equal(s.top(), 'abc');
+      assert.equal(s.top(1), 5);
 
       s.push(/abc/);
-      s.top().should.be.eql(/abc/);
-      s.top(1).should.be.eql('abc');
-      s.top(2).should.be.eql(5);
-      should.not.exist(s.top(3));
+      assert.deepEqual(s.top(), /abc/);
+      assert.equal(s.top(1), 'abc');
+      assert.equal(s.top(2), 5);
+      assert.equal(s.top(3), undefined);
     });
 
   });
@@ -34,41 +34,41 @@ describe('stack', () => {
     it('pop should return previously pushed item', () => {
       const s = stack();
 
-      s.empty().should.be.true();
-      should.not.exist(s.pop());
+      assert.ok(s.empty());
+      assert.equal(s.pop(), undefined);
 
       s.push('abc');
       s.push('cda');
 
-      s.empty().should.be.false();
+      assert.ok(!s.empty(), 'should not be empty');
 
-      s.pop().should.be.eql('cda');
-      s.pop().should.be.eql('abc');
+      assert.equal(s.pop(), 'cda');
+      assert.equal(s.pop(), 'abc');
 
-      s.empty().should.be.true();
+      assert.ok(s.empty());
     });
 
     it('pop should only return item if pushed tag matches', () => {
       const s = stack();
 
-      s.empty().should.be.true();
-      should.not.exist(s.pop());
+      assert.ok(s.empty());
+      assert.equal(s.pop(), undefined);
 
       s.push('abc', 'T1');
       s.push('cda', 'T2');
 
-      should.not.exist(s.pop());
-      should.not.exist(s.pop('T1'));
-      should.not.exist(s.pop('xxx'));
+      assert.equal(s.pop(), undefined);
+      assert.equal(s.pop('T1'), undefined);
+      assert.equal(s.pop('xxx'), undefined);
 
-      s.pop('T2').should.be.eql('cda');
+      assert.equal(s.pop('T2'), 'cda');
 
-      should.not.exist(s.pop());
-      should.not.exist(s.pop('T2'));
+      assert.equal(s.pop(), undefined);
+      assert.equal(s.pop('T2'), undefined);
 
-      s.pop('T1').should.be.eql('abc');
+      assert.equal(s.pop('T1'), 'abc');
 
-      s.empty().should.be.true();
+      assert.ok(s.empty());
     });
   });
 

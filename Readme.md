@@ -20,28 +20,27 @@ $ npm install --save sax-super-stream
 Example below shows how to print the titles of the articles from RSS feed.
 
 ```js
-var getlet = require('getlet');
-var stream = require('sax-super-stream');
-
-var PARSERS = {
+const PARSERS = {
   'rss': {
     'channel': {
       'item': {
         $: stream.object,
         'title': {
-          $text: function(text, o) { o.title = text; }
+          $text(text, o) { o.title = text; }
         }
       }
     }
   }
 };
 
-getlet('http://blog.npmjs.org/rss')
-  .pipe(stream(PARSERS))
-  .on('data', function(item) {
-    console.log(item.title);
-  });
+const res = await fetch('http://blog.npmjs.org/rss');
+const rssStream = res.body
+  .pipeThrough(new TextDecoderStream())
+  .pipeThrough(stream(PARSERS));
 
+for await (const item of rssStream) {
+  console.log('title: %s', item.title);
+}
 ```
 
 More examples can be found in [Furkot][] [GPX][furkot-import-gpx] and [KML][furkot-import-kml] importers.
@@ -115,8 +114,8 @@ There are several predefined parser functions that can be used in parser config:
 MIT © [Damian Krzeminski](https://pirxpilot.me)
 
 [Furkot]: https://furkot.com
-[furkot-import-gpx]: https://npmjs.org/package/furkot-import-gpx
-[furkot-import-kml]: https://npmjs.org/package/furkot-import-kml
+[furkot-import-gpx]: https://npmjs.org/package/@furkot/import-gpx
+[furkot-import-kml]: https://npmjs.org/package/@furkot/import-kml
 [sax]: https://npmjs.org/package/sax-js
 
 [npm-image]: https://img.shields.io/npm/v/sax-super-stream

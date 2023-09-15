@@ -1,4 +1,6 @@
 const { describe, it } = require('node:test');
+const assert = require('node:assert/strict');
+
 const parsers = require('../lib/parsers');
 
 describe('parsers', () => {
@@ -8,18 +10,18 @@ describe('parsers', () => {
     it('should create a new object', () => {
       const object = parsers.object();
 
-      object().should.eql({});
-      object().should.not.be.exactly(object());
+      assert.deepEqual(object(), {});
+      assert.notEqual(object(), object());
     });
 
     it('should create a new object and assign it to parent', () => {
-      let node;
       const parent = {};
       const object = parsers.object('bongo');
 
+      let node;
       const o = object(node, parent);
-      o.should.be.eql({});
-      o.should.be.exactly(parent.bongo);
+      assert.deepEqual(o, {});
+      assert.equal(o, parent.bongo);
     });
   });
 
@@ -29,8 +31,8 @@ describe('parsers', () => {
     it('should create a new collection', () => {
       const collection = parsers.collection();
 
-      collection().should.eql([]);
-      collection().should.not.be.exactly(collection());
+      assert.deepEqual(collection(), []);
+      assert.notEqual(collection(), collection());
     });
 
     it('should create a new collection and assign it to parent', () => {
@@ -39,8 +41,8 @@ describe('parsers', () => {
       const collection = parsers.collection('bongo');
 
       const o = collection(node, parent);
-      o.should.be.eql([]);
-      o.should.be.exactly(parent.bongo);
+      assert.deepEqual(o, []);
+      assert.equal(o, parent.bongo);
     });
   });
 
@@ -52,17 +54,17 @@ describe('parsers', () => {
 
       const o = atc(node, parent);
 
-      o.should.eql({});
-      parent.items.should.have.length(1);
-      parent.items[0].should.be.exactly(o);
+      assert.deepEqual(o, {});
+      assert.equal(parent.items.length, 1);
+      assert.equal(parent.items[0], o);
 
       const p = atc(node, parent);
-      p.should.eql({});
-      p.should.not.be.exactly(o);
+      assert.deepEqual(p, {});
+      assert.notEqual(p, o);
 
-      parent.items.should.have.length(2);
-      parent.items[0].should.be.exactly(o);
-      parent.items[1].should.be.exactly(p);
+      assert.equal(parent.items.length, 2);
+      assert.equal(parent.items[0], o);
+      assert.equal(parent.items[1], p);
     });
   });
 
@@ -73,10 +75,10 @@ describe('parsers', () => {
       const ac = parsers.addChild('bongo');
 
       const o = ac(node, parent);
-      o.should.be.eql({});
-      o.should.be.exactly(parent.bongo);
+      assert.deepEqual(o, {});
+      assert.equal(o, parent.bongo);
 
-      o.should.be.exactly(ac(node, parent), 'when called again return the same object');
+      assert.equal(o, ac(node, parent), 'when called again return the same object');
     });
   });
 
@@ -86,9 +88,9 @@ describe('parsers', () => {
       const at = parsers.assignTo('akuku');
 
       at(5, parent);
-      parent.akuku.should.eql(5);
+      assert.equal(parent.akuku, 5);
       at('abc', parent);
-      parent.akuku.should.eql('abc');
+      assert.equal(parent.akuku, 'abc');
     });
   });
 

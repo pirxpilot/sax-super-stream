@@ -16,12 +16,11 @@
     "object"
   ],
   "dependencies": {
-    "debug": "~2 || ~3 || ~4",
-    "sax": "^1.2.1"
+    "@pirxpilot/saxophone": "^1.0.0",
+    "debug": "~2 || ~3 || ~4"
   },
   "devDependencies": {
-    "jshint": "~2",
-    "should": "~13"
+    "jshint": "~2"
   },
   "scripts": {
     "test": "make check"
